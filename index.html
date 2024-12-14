@@ -59,55 +59,11 @@
       text-align: center;
       margin-top: 20px;
     }
-    .popup {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: black;
-      color: white;
-      padding: 50px;
-      border-radius: 20px;
-      box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
-      z-index: 10000;
-      text-align: center;
-      width: 90%;
-      max-width: 600px;
-    }
-    .popup h2 {
-      margin-bottom: 30px;
-    }
-    .popup button {
-      background-color: red;
-      color: white;
-      border: none;
-      padding: 15px 25px;
-      margin: 15px;
-      font-size: 18px;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    .close-btn {
-      background-color: green;
-    }
-    .telegram-button {
-      margin-top: 20px;
-    }
-    .telegram-button a {
-      background-color: red;
-      color: white;
-      text-decoration: none;
-      padding: 15px 30px;
-      border-radius: 8px;
-      font-size: 18px;
-      font-weight: bold;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
-    }
     .no-scroll {
       overflow: hidden;
     }
   </style>
-  <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
+  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <script>
     // Prevent embedding via JavaScript
     if (window.top !== window.self) {
@@ -123,69 +79,35 @@
 
   <div id="player"></div>
 
-  <div class="telegram-button">
-    <a href="https://t.me/+xl-C7GFGTkM4MDk5" target="_blank">Join Telegram Channel</a>
-  </div>
-
   <marquee behavior="scroll" direction="left">
     "Copyright Disclaimer: We do not stream any of the channels included in this website. All the streaming links are from third-party websites freely available on the internet. We're just providing a way to stream, and all content is the copyright of their respective owners."
   </marquee>
 
   <script>
-    // Display a full-screen pop-up that users must interact with
-    window.addEventListener("load", function() {
-      var popup = document.createElement("div");
-      popup.className = "popup";
+    // Function to get video URL from the domain
+    function getVideoUrlFromDomain() {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('videoUrl');
+    }
 
-      popup.innerHTML = `
-        <h2>Support Us!</h2>
-        <p>Join our Telegram channel <br>@cricketguru071 for more updates.</p>
-        <button id="joinButton">Join Now</button>
-        <button id="closeButton" class="close-btn">Already Joined</button>
-      `;
-
-      document.body.appendChild(popup);
-      document.body.classList.add("no-scroll");
-
-      document.getElementById("joinButton").addEventListener("click", function() {
-        window.location.href = "https://t.me/+xl-C7GFGTkM4MDk5";
-      });
-
-      document.getElementById("closeButton").addEventListener("click", function() {
-        document.body.removeChild(popup);
-        document.body.classList.remove("no-scroll");
-      });
-    });
-
-    // Video player initialization with sound ON
-    var urlParams = new URLSearchParams(window.location.search);
-    var maxvalue = urlParams.get("videoUrl");
-
-    var playerInstance = jwplayer("player").setup({
-      file: maxvalue || 'https://example.com/path/to/default/video.m3u8',
+    jwplayer("player").setup({
       width: "100%",
-      height: "auto",
-      primary: "html5",
-      sources: [
-        { file: maxvalue, label: "360p", type: "application/x-mpegURL" },
-        { file: maxvalue, label: "480p", type: "application/x-mpegURL" },
-        { file: maxvalue, label: "720p", type: "application/x-mpegURL" },
-        { file: maxvalue, label: "1080p", type: "application/x-mpegURL" },
-      ],
-      aspectratio: "16:9",
-      controls: true,
-      autostart: true, // Ensure video starts playing
-      mute: false,     // Ensure sound is ON
-      stretching: "uniform",
+      height: "100%",
+      autostart: true,
+      mute: false,
+      file: getVideoUrlFromDomain() || 'https://example.com/path/to/default/video.m3u8', // Default fallback video URL
     });
 
+    // Unmute the player when clicked
     document.addEventListener('click', function() {
+      var playerInstance = jwplayer("player");
       playerInstance.setMute(false); // Unmute player
       playerInstance.setVolume(100); // Set volume to 100%
     });
 
-    playerInstance.on('ready', function() {
-      document.getElementById('loading').style.display = 'none'; // Hide the loading screen when player is ready
+    // Hide loading screen when player is ready
+    jwplayer("player").on('ready', function() {
+      document.getElementById('loading').style.display = 'none';
     });
   </script>
 </body>
