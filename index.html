@@ -27,22 +27,6 @@
       max-width: 800px;
       height: auto;
       margin-top: 80px;
-      position: relative;
-    }
-    .custom-sound-btn {
-      position: absolute;
-      bottom: 20px;
-      right: 20px;
-      background-color: red;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      font-size: 18px;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     }
     marquee {
       background-color: darkgoldenrod;
@@ -82,7 +66,7 @@
       return urlParams.get('videoUrl') || 'https://example.com/path/to/default/video.m3u8'; // Default video if none provided
     }
 
-    // Initialize JWPlayer and add custom sound button
+    // Initialize JWPlayer
     window.addEventListener('load', function () {
       const videoUrl = getVideoUrlFromDomain();
       const playerInstance = jwplayer("player").setup({
@@ -96,29 +80,10 @@
         controls: true,
       });
 
-      // Create custom sound button
-      const soundButton = document.createElement('button');
-      soundButton.innerHTML = "🔊"; // Sound icon
-      soundButton.className = "custom-sound-btn";
-
-      // Add sound button behavior
-      let isMuted = true;
-      soundButton.addEventListener('click', function () {
-        isMuted = !isMuted;
-        playerInstance.setMute(isMuted);
-        playerInstance.setVolume(isMuted ? 0 : 100);
-        soundButton.innerHTML = isMuted ? "🔇" : "🔊"; // Toggle icon
-      });
-
-      // Add the button to the player container
-      document.getElementById('player').appendChild(soundButton);
-
-      // Automatically unmute on first user click
+      // Automatically unmute on first user interaction
       document.addEventListener('click', function () {
         playerInstance.setMute(false);
         playerInstance.setVolume(100);
-        isMuted = false;
-        soundButton.innerHTML = "🔊";
       });
     });
   </script>
