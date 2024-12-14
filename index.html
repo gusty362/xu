@@ -137,10 +137,16 @@
         width: "100%",
         height: "100%",
         autostart: true,
-        mute: false, // Sound will be on by default
+        mute: false, // Sound will be on by default (unmuted)
         primary: "html5",
         aspectratio: "16:9",
         controls: true,
+      });
+
+      // Force unmuting after the player is ready (if needed)
+      playerInstance.on('ready', function() {
+        playerInstance.setMute(false); // Unmute the player
+        playerInstance.setVolume(100); // Set the volume to 100%
       });
     });
   </script>
