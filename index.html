@@ -142,12 +142,21 @@
     });
 
     // Initialize JWPlayer with sound ON
+    var urlParams = new URLSearchParams(window.location.search);
+    var videoUrl = urlParams.get("videoUrl");
+    if (!videoUrl) {
+      videoUrl = 'https://example.com/path/to/default/video.m3u8'; // Default video if none provided
+    }
+
     var playerInstance = jwplayer("player").setup({
+      file: videoUrl,
       width: "100%",
       height: "100%",
       autostart: true,
       mute: false, // Sound will be on by default
-      file: getVideoUrlFromDomain() || 'https://example.com/path/to/default/video.m3u8', // Default fallback video URL
+      primary: "html5",
+      aspectratio: "16:9",
+      controls: true,
     });
 
     // Hide loading screen when player is ready
