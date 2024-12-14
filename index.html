@@ -26,18 +26,7 @@
       width: 100%;
       max-width: 800px;
       height: auto;
-      margin-top: 80px;
-    }
-    marquee {
-      background-color: darkgoldenrod;
-      color: white;
-      font-weight: bold;
-      width: 100%;
-      padding: 10px 0;
-      font-family: Georgia, serif;
-      border-radius: 10px;
-      text-align: center;
-      margin-top: 20px;
+      margin-top: 50px;
     }
     .telegram-button {
       margin-top: 20px;
@@ -52,13 +41,24 @@
       font-weight: bold;
       box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     }
+    marquee {
+      background-color: darkgoldenrod;
+      color: white;
+      font-weight: bold;
+      width: 100%;
+      padding: 10px 0;
+      font-family: Georgia, serif;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+    }
   </style>
   <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      // Get the video URL from query parameters
+    window.addEventListener("load", function() {
+      // Get the video URL from query parameters or use a default video
       const urlParams = new URLSearchParams(window.location.search);
-      const videoUrl = urlParams.get('videoUrl') || 'https://example.com/path/to/default/video.m3u8'; // Default video URL
+      const videoUrl = urlParams.get('videoUrl') || 'https://cdn.jwplayer.com/manifests/yp34SRmf.m3u8'; // Replace with your default video URL
 
       // Initialize JWPlayer
       const playerInstance = jwplayer("player").setup({
@@ -73,17 +73,16 @@
         controls: true,
       });
 
-      // Ensure player is unmuted when it loads
+      // Ensure player is unmuted at startup
       playerInstance.on('ready', function () {
         playerInstance.setMute(false); // Force unmute
-        playerInstance.setVolume(100); // Set volume to 100%
+        playerInstance.setVolume(100); // Ensure max volume
       });
 
       // Fix mute/unmute button behavior
-      playerInstance.on('mute', function () {
-        if (playerInstance.getMute()) {
-          playerInstance.setMute(false); // Unmute if muted
-        }
+      document.addEventListener('click', function () {
+        playerInstance.setMute(false); // Ensure unmute on user interaction
+        playerInstance.setVolume(100); // Set volume to 100%
       });
     });
   </script>
