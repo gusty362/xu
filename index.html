@@ -66,23 +66,24 @@
         width: "100%",
         height: "450px",
         autostart: true, // Automatically start playing
-        mute: false, // Start unmuted
-        volume: 100, // Set volume to 100%
+        mute: true, // Start muted
+        volume: 0, // Start with volume 0 (muted)
         primary: "html5",
         aspectratio: "16:9",
         controls: true,
       });
 
-      // Ensure player is unmuted at startup
-      playerInstance.on('ready', function () {
-        playerInstance.setMute(false); // Force unmute
-        playerInstance.setVolume(100); // Ensure max volume
-      });
-
       // Fix mute/unmute button behavior
       document.addEventListener('click', function () {
-        playerInstance.setMute(false); // Ensure unmute on user interaction
+        playerInstance.setMute(false); // Unmute on user interaction
         playerInstance.setVolume(100); // Set volume to 100%
+      });
+
+      // Display mute/unmute functionality
+      playerInstance.on('ready', function () {
+        // Ensure the player starts muted
+        playerInstance.setMute(true); // Ensure it is muted by default
+        playerInstance.setVolume(0); // Ensure volume is 0 at the start
       });
     });
   </script>
