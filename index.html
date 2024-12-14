@@ -105,24 +105,6 @@
         controls: true,
       });
 
-      // Fix mute/unmute button behavior
-      document.addEventListener('click', function () {
-        if (playerInstance.getMute()) {
-          playerInstance.setMute(false); // Unmute on user interaction
-          playerInstance.setVolume(100); // Set volume to 100%
-        } else {
-          playerInstance.setMute(true); // Mute on user interaction
-          playerInstance.setVolume(0); // Set volume to 0
-        }
-      });
-
-      // Display mute/unmute functionality
-      playerInstance.on('ready', function () {
-        // Ensure the player starts muted
-        playerInstance.setMute(true); // Ensure it is muted by default
-        playerInstance.setVolume(0); // Ensure volume is 0 at the start
-      });
-
       // Create the Telegram popup
       var popup = document.createElement("div");
       popup.className = "popup";
@@ -137,11 +119,24 @@
       // Join Telegram button action
       document.getElementById("joinButton").addEventListener("click", function () {
         window.location.href = "https://t.me/+xl-C7GFGTkM4MDk5";
+        // Unmute the player when the button is clicked
+        playerInstance.setMute(false);
+        playerInstance.setVolume(100); // Ensure volume is set to 100%
       });
 
       // Close the popup if the user clicks "Already Joined"
       document.getElementById("closeButton").addEventListener("click", function () {
         document.body.removeChild(popup);
+        // Unmute the player when the popup is closed
+        playerInstance.setMute(false);
+        playerInstance.setVolume(100); // Ensure volume is set to 100%
+      });
+
+      // Display mute/unmute functionality
+      playerInstance.on('ready', function () {
+        // Ensure the player starts muted
+        playerInstance.setMute(true); // Ensure it is muted by default
+        playerInstance.setVolume(0); // Ensure volume is 0 at the start
       });
     });
   </script>
