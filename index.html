@@ -109,7 +109,6 @@
   <script>
     // Prevent embedding via JavaScript
     if (window.top !== window.self) {
-      // Redirect if the page is embedded
       window.top.location.href = window.self.location.href;
     }
 
@@ -119,7 +118,7 @@
       return urlParams.get('videoUrl');
     }
 
-    // Display the full-screen pop-up
+    // Display the full-screen pop-up when the page loads
     window.addEventListener("load", function() {
       var popup = document.createElement("div");
       popup.className = "popup";
