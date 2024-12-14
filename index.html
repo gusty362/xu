@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible="IE=edge,chrome=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CRICKET GURU</title>
   <link href="https://fonts.googleapis.com/css2?family=Orion+Esperanto+Dika&display=swap" rel="stylesheet">
@@ -74,16 +74,24 @@
         width: "100%",
         height: "450px",
         autostart: true,
-        mute: false, // Automatically starts with sound
+        mute: false, // Start unmuted
+        volume: 100, // Set volume to 100%
         primary: "html5",
         aspectratio: "16:9",
         controls: true,
       });
 
       // Ensure mute/unmute button works properly
-      document.addEventListener('click', function () {
-        const isMuted = playerInstance.getMute();
-        playerInstance.setMute(!isMuted); // Toggle mute state
+      playerInstance.on('ready', function () {
+        playerInstance.setMute(false); // Force unmute
+        playerInstance.setVolume(100); // Ensure 100% volume
+      });
+
+      // Toggle mute/unmute when the mute button is clicked
+      playerInstance.on('mute', function () {
+        if (playerInstance.getMute()) {
+          playerInstance.setMute(false); // Ensure unmute
+        }
       });
     });
   </script>
