@@ -2,37 +2,202 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SPPRTCRICKET</title>
-  <script src="https://content.jwplatform.com/libraries/KB5zFt7A.js"></script>
-</head>
-<body>
-  <div id="video"></div>
-
-  <script type="text/javascript">
-    // Function to get video URL from the domain
-    function getVideoUrlFromDomain() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('videoUrl');
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CRICKET GURU</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orion+Esperanto+Dika&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Copperplate&display=swap" rel="stylesheet">
+  <style>
+    html {
+      font-family: 'Orion Esperanto Dika', sans-serif;
+      background: #000;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      color: #DAA520;
+    }
+    #player {
+      width: 100%;
+      max-width: 800px;
+      height: auto;
+      margin-top: 80px;
+      border: 5px solid red;
+      border-radius: 10px;
+      box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);
+    }
+    .loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .loading-text {
+      text-align: center;
+      font-size: 24px;
+    }
+    marquee {
+      background-color: darkgoldenrod;
+      color: white;
+      font-weight: bold;
+      width: 100%;
+      padding: 10px 0;
+      font-family: Georgia, serif;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+    }
+    .popup {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: black;
+      color: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255, 0, 0, 0.8);
+      z-index: 10000;
+      text-align: center;
+      width: 90%;
+      max-width: 600px;
+    }
+    .popup h2 {
+      margin-bottom: 30px;
+    }
+    .popup button {
+      background-color: red;
+      color: white;
+      border: none;
+      padding: 15px 25px;
+      margin: 15px;
+      font-size: 18px;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .close-btn {
+      background-color: green;
+    }
+    .telegram-button {
+      margin-top: 20px;
+    }
+    .telegram-button a {
+      background-color: red;
+      color: white;
+      text-decoration: none;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
+    }
+    .no-scroll {
+      overflow: hidden;
+    }
+    .unmute-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: green;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      z-index: 9999;
+    }
+  </style>
+  <script src="https://cdn.jwplayer.com/libraries/IDzF9Zmk.js"></script>
+  <script>
+    // Prevent embedding via JavaScript
+    if (window.top !== window.self) {
+      window.top.location.href = window.self.location.href;
     }
 
-    jwplayer("video").setup({
-      width: "100%",
-      height: "100%",
-      autostart: true,
-      mute: false,
-      file: getVideoUrlFromDomain()
+    window.addEventListener("load", function () {
+      // Telegram pop-up
+      var popup = document.createElement("div");
+      popup.className = "popup";
+      popup.innerHTML = `
+        <h2>Support Us!</h2>
+        <p>Join our Telegram channel <br>@cricketguru071 for more updates.</p>
+        <button id="joinButton">Join Now</button>
+        <button id="closeButton" class="close-btn">Already Joined</button>
+      `;
+      document.body.appendChild(popup);
+      document.body.classList.add("no-scroll");
+
+      document.getElementById("joinButton").addEventListener("click", function () {
+        window.location.href = "https://t.me/+xl-C7GFGTkM4MDk5";
+      });
+
+      document.getElementById("closeButton").addEventListener("click", function () {
+        document.body.removeChild(popup);
+        document.body.classList.remove("no-scroll");
+      });
     });
 
-    if(confirm("Join Our Telegram Channel @SPPRTCRICKET For More Links")) { window.location.href = "https://tttttt.me/SPPRTCRICKET" }
-  </script>
+    // Initialize video player
+    var urlParams = new URLSearchParams(window.location.search);
+    var videoUrl = urlParams.get("videoUrl");
 
-  <div style="background-color: #0074d9; text-align: center; padding: 10px;">
-    <a href="https://tttttt.me/SPPRTCRICKET" target="_blank">
-      <button id="joinTelegramButton" style="background-color: #fff; color: #0074d9; border: 2px solid #0074d9; padding: 5px 10px;">Join
-        Telegram</button>
-    </a>
+    var playerInstance = jwplayer("player").setup({
+      file: videoUrl || "https://example.com/path/to/default/video.m3u8",
+      width: "100%",
+      height: "auto",
+      primary: "html5",
+      controls: true,
+      autostart: true,
+      mute: false,
+      stretching: "uniform",
+    });
+
+    // Loading screen dismissal
+    playerInstance.on("ready", function () {
+      document.getElementById("loading").style.display = "none";
+    });
+
+    // Unmute button functionality
+    document.addEventListener("DOMContentLoaded", function () {
+      var unmuteButton = document.createElement("button");
+      unmuteButton.className = "unmute-btn";
+      unmuteButton.textContent = "Unmute";
+      document.body.appendChild(unmuteButton);
+
+      unmuteButton.addEventListener("click", function () {
+        playerInstance.setMute(false);
+        playerInstance.setVolume(100);
+        unmuteButton.style.display = "none";
+      });
+    });
+  </script>
+</head>
+<body>
+  <div id="loading" class="loading">
+    <div class="loading-text">LOADING CRICKET GURU...</div>
   </div>
+
+  <div id="player"></div>
+
+  <div class="telegram-button">
+    <a href="https://t.me/+xl-C7GFGTkM4MDk5" target="_blank">Join Telegram Channel</a>
+  </div>
+
+  <marquee behavior="scroll" direction="left">
+    "Copyright Disclaimer: We do not stream any of the channels included in this website. All the streaming links are from third-party websites freely available on the internet. We're just providing a way to stream, and all content is the copyright of their respective owners."
+  </marquee>
 </body>
 </html>
