@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>CRICKET GURU</title>
   <link href="https://fonts.googleapis.com/css2?family=Orion+Esperanto+Dika&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Copperplate&display=swap" rel="stylesheet">
   <style>
     html {
       font-family: 'Orion Esperanto Dika', sans-serif;
@@ -28,8 +27,22 @@
       max-width: 800px;
       height: auto;
       margin-top: 80px;
-      border-radius: 10px;
-      box-shadow: 0 0 20px 5px rgba(255, 0, 0, 0.7);
+      position: relative;
+    }
+    .custom-sound-btn {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      background-color: red;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.7);
     }
     marquee {
       background-color: darkgoldenrod;
@@ -69,10 +82,9 @@
       return urlParams.get('videoUrl') || 'https://example.com/path/to/default/video.m3u8'; // Default video if none provided
     }
 
-    // Initialize JWPlayer
+    // Initialize JWPlayer and add custom sound button
     window.addEventListener('load', function () {
       const videoUrl = getVideoUrlFromDomain();
-
       const playerInstance = jwplayer("player").setup({
         file: videoUrl,
         width: "100%",
@@ -84,15 +96,29 @@
         controls: true,
       });
 
-      // Unmute the player on the first user interaction
-      document.addEventListener('click', function () {
-        playerInstance.setMute(false); // Unmute the player
-        playerInstance.setVolume(100); // Set volume to 100%
+      // Create custom sound button
+      const soundButton = document.createElement('button');
+      soundButton.innerHTML = "🔊"; // Sound icon
+      soundButton.className = "custom-sound-btn";
+
+      // Add sound button behavior
+      let isMuted = true;
+      soundButton.addEventListener('click', function () {
+        isMuted = !isMuted;
+        playerInstance.setMute(isMuted);
+        playerInstance.setVolume(isMuted ? 0 : 100);
+        soundButton.innerHTML = isMuted ? "🔇" : "🔊"; // Toggle icon
       });
 
-      // Remove mute on player ready
-      playerInstance.on('ready', function () {
-        playerInstance.setMute(false); // Ensure unmuted on ready
+      // Add the button to the player container
+      document.getElementById('player').appendChild(soundButton);
+
+      // Automatically unmute on first user click
+      document.addEventListener('click', function () {
+        playerInstance.setMute(false);
+        playerInstance.setVolume(100);
+        isMuted = false;
+        soundButton.innerHTML = "🔊";
       });
     });
   </script>
